@@ -85,7 +85,7 @@ export default class App extends Component {
 
     cards = cards.filter(card => firstRegex.test(card));
     console.log(cards);
-    let cardRegex = /^(\d{1,2})x ([\w,'? ]*)(\(\w*\))?$/;
+    let cardRegex = /^(\d{1,2})x ([\w,\-'? ]*)(\(\w*\))?$/;
     let cardNames = cards.map(card => cardRegex.exec(card)[2].trim());
 
     let searchedCards = this.state.cards.filter(card => cardNames.includes(card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
@@ -99,9 +99,9 @@ export default class App extends Component {
     cards.forEach((card) => {
       let groups = cardRegex.exec(card);
       let number = +groups[1].trim().replace("x", "");
-      let name = groups[2].trim();
+      let name = groups[2].trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       let pitch = pitchConverter[groups[3]];
-      let chosenCard = searchedCards.find((card) => card.name == name && (!pitch || card.pitch == pitch));
+      let chosenCard = searchedCards.find((card) => card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") == name && (!pitch || card.pitch == pitch));
       if(chosenCard) {
         for (let idx = 0; idx < number; idx++) {
           finalCards.push({ card: chosenCard, printing: chosenCard.printings[chosenCard.printings.length - 1] });

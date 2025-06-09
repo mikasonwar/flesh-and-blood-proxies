@@ -52,13 +52,13 @@ export default class App extends Component {
   }
 
   searchCards = (name) => {
-    name = name.toLowerCase();
+    name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     if (name.length < 3) {
       this.setState({ searchResultCards: [] });
       return;
     }
 
-    let foundCards = this.state.cards.filter((card) => card.name.toLowerCase().includes(name));
+    let foundCards = this.state.cards.filter((card) => card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(name));
 
     console.log(foundCards)
     this.setState({ searchResultCards: [...foundCards] });
@@ -80,7 +80,7 @@ export default class App extends Component {
   }
 
   importFromFabrary = (list) => {
-    let cards = list.replace("Hero:", "1x").split('\n');
+    let cards = list.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("Hero:", "1x").split('\n');
     let firstRegex = /^\d{1,2}x /;
 
     cards = cards.filter(card => firstRegex.test(card));
@@ -88,7 +88,7 @@ export default class App extends Component {
     let cardRegex = /^(\d{1,2})x ([\w,'? ]*)(\(\w*\))?$/;
     let cardNames = cards.map(card => cardRegex.exec(card)[2].trim());
 
-    let searchedCards = this.state.cards.filter(card => cardNames.includes(card.name));
+    let searchedCards = this.state.cards.filter(card => cardNames.includes(card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
     let finalCards = [];
     let pitchConverter = {
       "": "",

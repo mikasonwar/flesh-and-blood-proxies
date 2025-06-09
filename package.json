@@ -1,0 +1,21 @@
+{
+  "name": "flesh-and-blood-proxies",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:preview": "vite build; vite preview",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.6",
+    "preact": "^10.26.5",
+    "styled-components": "^6.1.18"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.1",
+    "vite": "^6.3.5"
+  }
+}

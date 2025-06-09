@@ -1,0 +1,115 @@
+#app {
+  max-width: 1620px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.preact:hover {
+  filter: drop-shadow(0 0 2em #673ab8aa);
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  font-size: 32px;
+  padding: 10px;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+.tabs > div {
+  padding: 10px 160px;
+  border-radius: 4px;
+}
+
+.tabs > div:hover {
+  background-color: #ca88ebaa;
+}
+
+.tabs > div.active-tab {
+  background-color: #ca88eb55;
+}
+
+.tab-content > div {
+  display: none;
+}
+
+.tab-content > div.active-tab {
+  display: flex;
+  justify-content: center;
+  padding: 20px 10px;
+  margin: auto;
+}
+
+.search-content-tab {
+  display:flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: baseline;
+  align-content: center;
+  font-size: 18px;
+}
+
+.search-content-tab input {
+  width: 60%;
+}
+
+.import-content-tab {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.import-content-tab textarea {
+  height: 250px;
+  width: 65%;
+  max-width: 600px;
+}
+
+h1.project-title {
+  border-bottom: solid 5px #752c9a55;
+}
+
+.page-wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+footer.my-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffffdd;
+}
+
+div.top-menu {
+  background-color: #ffffff99;
+  margin-top: 2px;
+  padding-bottom: 5px;
+  border-radius: 4px;
+}

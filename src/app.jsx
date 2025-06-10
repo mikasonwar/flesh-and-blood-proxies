@@ -13,6 +13,10 @@ const AppContainer = styled.div`
   > * {
     width: 100%;
   }
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 
@@ -85,7 +89,7 @@ export default class App extends Component {
 
     cards = cards.filter(card => firstRegex.test(card));
     console.log(cards);
-    let cardRegex = /^(\d{1,2})x ([\w,\-'? ]*)(\(\w*\))?$/;
+    let cardRegex = /^(\d{1,2})x ([^\(\)]*)(\(\w*\))?$/;
     let cardNames = cards.map(card => cardRegex.exec(card)[2].trim());
 
     let searchedCards = this.state.cards.filter(card => cardNames.includes(card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
@@ -138,16 +142,16 @@ export default class App extends Component {
           </div>
         </div>
         <div style="display: flex; gap:10px;justify-content:center;">
-          <button onClick={() => window.print()}>Print</button>
-          <button onClick={() => this.setState({ chosenCards: [] })}>Clear</button>
-          { this.state.activeTab == 'import' && (<button onClick={() => this.importFromFabrary(document.querySelector('textarea[name="card-import"]').value)}>import from fabrary</button>) }
+          <button class="btn btn-primary" onClick={() => window.print()}>Print</button>
+          <button class="btn btn-primary" onClick={() => this.setState({ chosenCards: [] })}>Clear</button>
+          { this.state.activeTab == 'import' && (<button class="btn btn-primary" onClick={() => this.importFromFabrary(document.querySelector('textarea[name="card-import"]').value)}>import from fabrary</button>) }
         </div>
       </div>
       <AppContainer>
-        <div class="no-print">
+        <div class="no-print" style={`${ this.state.searchResultCards.length > 0 ? '' : 'display:none;'}`}>
           {(this.state.activeTab == 'search' && <CardList cards={this.state.searchResultCards} chosenList={false} addCardToChosenCards={this.addCardToChosenCards} />)}
         </div>
-        <div>
+        <div style={`${ this.state.chosenCards.length > 0 ? '' : 'display:none;'}`}>
           <CardList cards={this.state.chosenCards} chosenList={true} removeCardFromChosenCards={this.removeCardFromChosenCards} />
         </div>
       </AppContainer>

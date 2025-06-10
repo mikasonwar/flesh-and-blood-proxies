@@ -14,6 +14,11 @@ const CardDiv = styled.div`
       height: 88mm;
       width: 63mm;
     }
+    
+    @media only screen and (max-width: 600px) {
+      max-width: 100%;
+      height: unset;
+    }
   }
 
   @media print {

@@ -8,10 +8,14 @@ const CardListDiv = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  background-color: #ffffffaa;
+  background-color: #ffffffdd;
 
   @media print {
     gap: 0;
+  }
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 `
 

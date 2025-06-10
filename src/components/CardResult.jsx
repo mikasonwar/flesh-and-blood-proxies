@@ -7,17 +7,13 @@ const CardDiv = styled.div`
   gap: 2px;
   flex-direction: column;
   img {
-    height: 300px;
+    max-width: 100%;
 
     @media print {
       border: dashed 2px black;
       height: 88mm;
       width: 63mm;
-    }
-    
-    @media only screen and (max-width: 600px) {
-      max-width: 100%;
-      height: unset;
+      max-width: unset;
     }
   }
 

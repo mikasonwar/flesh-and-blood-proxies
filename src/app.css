@@ -63,7 +63,6 @@
   }
 
   footer.my-footer {
-    position: unset !important;
     font-size: 0.9rem;
   }
 
@@ -115,7 +114,6 @@ h1.project-title {
 }
 
 footer.my-footer {
-  position: sticky;
   bottom: 0;
   background-color: #ffffffdd;
 }

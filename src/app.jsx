@@ -155,8 +155,8 @@ export default class App extends Component {
         </div>
       </div>
       <AppContainer>
-        <div class="no-print" style={`${ this.state.searchResultCards.length > 0 ? '' : 'display:none;'}`}>
-          {(this.state.activeTab == 'search' && <CardList cards={this.state.searchResultCards} chosenList={false} addCardToChosenCards={this.addCardToChosenCards} />)}
+        <div class="no-print">
+          {(this.state.activeTab == 'search' && this.state.searchResultCards.length > 0 && <CardList cards={this.state.searchResultCards} chosenList={false} addCardToChosenCards={this.addCardToChosenCards} />)}
         </div>
         <div style={`${ this.state.chosenCards.length > 0 ? '' : 'display:none;'}`}>
           <CardList cards={this.state.chosenCards} chosenList={true} changeCardPrintingFromChosenCards={this.changeCardPrintingFromChosenCards} removeCardFromChosenCards={this.removeCardFromChosenCards} />

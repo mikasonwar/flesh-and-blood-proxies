@@ -83,6 +83,13 @@ export default class App extends Component {
     this.setState({ chosenCards: result });
   }
 
+  changeCardPrintingFromChosenCards = (index, printing) => {
+    let newList = [...this.state.chosenCards];
+    newList[index].printing = printing;
+    console.log(index, printing, newList[index]);
+    this.setState({ chosenCards: newList });
+  }
+
   importFromFabrary = (list) => {
     let cards = list.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("Hero:", "1x").split('\n');
     let firstRegex = /^\d{1,2}x /;
@@ -152,7 +159,7 @@ export default class App extends Component {
           {(this.state.activeTab == 'search' && <CardList cards={this.state.searchResultCards} chosenList={false} addCardToChosenCards={this.addCardToChosenCards} />)}
         </div>
         <div style={`${ this.state.chosenCards.length > 0 ? '' : 'display:none;'}`}>
-          <CardList cards={this.state.chosenCards} chosenList={true} removeCardFromChosenCards={this.removeCardFromChosenCards} />
+          <CardList cards={this.state.chosenCards} chosenList={true} changeCardPrintingFromChosenCards={this.changeCardPrintingFromChosenCards} removeCardFromChosenCards={this.removeCardFromChosenCards} />
         </div>
       </AppContainer>
     </>);

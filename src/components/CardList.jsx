@@ -11,7 +11,8 @@ const CardListDiv = styled.div`
   background-color: #ffffffdd;
 
   @media print {
-    gap: 0;
+    // gap: 0;
+    gap: 5px;
   }
 
   @media only screen and (max-width: 600px) {
@@ -25,12 +26,13 @@ export default class CardList extends Component {
       cards = [],
       addCardToChosenCards = null,
       removeCardFromChosenCards = null,
+      changeCardPrintingFromChosenCards = null,
       chosenList = false
     } = this.props;
 
     let rendered_cards;
     if (chosenList) {
-      rendered_cards = cards.map((entry) => <CardResult card={entry.card} printing={entry.printing} chosenList={true} removeCardFromChosenCards={removeCardFromChosenCards} />)
+      rendered_cards = cards.map((entry, idx) => <CardResult card={entry.card} printing={entry.printing} chosenList={true} entryIndex={idx} changeCardPrintingFromChosenCards={changeCardPrintingFromChosenCards} removeCardFromChosenCards={removeCardFromChosenCards} />)
     } else {
       rendered_cards = cards.map((card) => <CardResult card={card} chosenList={false} addCardToChosenCards={addCardToChosenCards} />);
     }

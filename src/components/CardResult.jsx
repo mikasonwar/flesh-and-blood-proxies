@@ -28,43 +28,146 @@ const CardDiv = styled.div`
 `
 
 const AddButton = styled.button.attrs({ className: 'no-print btn btn-success'})`
-  padding: 5px;
-  width: 100%;
   font-size: 18px;
 `;
 
 const RemoveButton = styled.button.attrs({ className: 'no-print btn btn-danger'})`
-  padding: 5px;
-  width: 100%;
   font-size: 18px;
+`
+
+const ActionContainer = styled.div.attrs({ className: 'no-print' })`
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  gap: 5px;
+`
+
+const MoveButton = styled.button.attrs({ className: 'no-print btn btn-primary' })`
+  padding: 10px;
 `
 
 
 export default class CardResult extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      printing: null,
+      currentPrintingIdx: 0
+    }
+  }
+
+  componentDidMount() {
+    this.setDefaultPrinting();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(!prevProps) {
+      return;
+    }
+
+    if(prevProps.card.unique_id != this.props.card.unique_id || prevProps.printing?.unique_id != this.props.printing?.unique_id) {
+      this.setDefaultPrinting();
+    }
+  }
+
+  setDefaultPrinting = () => {
+    let currentPrinting = this.props.printing || this.props.card.printings[0];
+    this.setState({
+      printing: currentPrinting,
+      currentPrintingIdx: this.props.card.printings.findIndex((printing) => currentPrinting.unique_id == printing.unique_id)
+    });
+  }
+
+  selectNextPrint = () => {
+    const { 
+      card = {}, 
+      chosenList = false,
+      changeCardPrintingFromChosenCards = null,
+      entryIndex = null,
+    } = this.props;
+
+    if (this.state.currentPrintingIdx >= card.printings.length - 1) {
+      return;
+    }
+
+    if(chosenList) {
+      if(entryIndex !== null) {
+        changeCardPrintingFromChosenCards(entryIndex, card.printings[this.state.currentPrintingIdx + 1]);
+      }
+    } else {
+      this.setState({
+        printing: card.printings[this.state.currentPrintingIdx + 1],
+        currentPrintingIdx: this.state.currentPrintingIdx + 1
+      });
+    }
+  }
+
+  selectPreviousPrint = () => {
+    const { 
+      card = {}, 
+      chosenList = false,
+      changeCardPrintingFromChosenCards = null,
+      entryIndex = null,
+    } = this.props;
+
+    if (this.state.currentPrintingIdx <= 0) {
+      return;
+    }
+
+    if(chosenList) {
+      if(entryIndex !== null) {
+        changeCardPrintingFromChosenCards(entryIndex, card.printings[this.state.currentPrintingIdx - 1]);
+      }
+    } else {
+      this.setState({
+        printing: card.printings[this.state.currentPrintingIdx - 1],
+        currentPrintingIdx: this.state.currentPrintingIdx - 1 
+      });
+    }
+  }
+
   render() {
     const { 
       card = {}, 
-      printing = null,
       chosenList = false
     } = this.props;
 
+    const {
+      printing
+    } = this.state;
+
     if (printing == null) {
-      return card.printings.map((printing) => (<CardResult printing={printing} { ...this.props } />))
+      return (
+        <CardDiv>
+          Loading...
+        </CardDiv>
+      )
     }
 
-    let action;
+    let canGoToNextPrint = this.state.currentPrintingIdx < card.printings.length -1;
+    let canGoToPreviousPrint = this.state.currentPrintingIdx > 0;
 
+    let actionButton;
     if(chosenList) {
-      action = (<RemoveButton onClick={() => this.props.removeCardFromChosenCards(card, printing)}> Remove </RemoveButton>)
+      actionButton = (<RemoveButton onClick={() => this.props.removeCardFromChosenCards(card, printing)}> Remove </RemoveButton>)
     } else {
-      action = (<AddButton onClick={() => this.props.addCardToChosenCards(card, printing)}> Add </AddButton>)
+      actionButton = (<AddButton onClick={() => this.props.addCardToChosenCards(card, printing)}> Add </AddButton>)
     }
 
     return (
       <CardDiv>
         <label class="no-print">{card.name}</label>
         <img src={printing.image_url} alt={card.name} />
-        {action}
+        <label class="no-print">Printing #{this.state.currentPrintingIdx+1}</label>
+        <ActionContainer>
+          <MoveButton onClick={() => this.selectPreviousPrint()} disabled={!canGoToPreviousPrint}>
+            {"<"}
+          </MoveButton>
+          {actionButton}
+          <MoveButton onClick={() => this.selectNextPrint()} disabled={!canGoToNextPrint}>
+            {">"}
+          </MoveButton>
+        </ActionContainer>
       </CardDiv>
     );
   }

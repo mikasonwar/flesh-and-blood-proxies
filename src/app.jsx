@@ -30,6 +30,7 @@ export default class App extends Component {
       searchResultCards: [],
       chosenCards: [],
       activeTab: 'search',
+      addGapOnPrint: false,
     }
   }
 
@@ -148,10 +149,14 @@ export default class App extends Component {
             <textarea name="card-import"></textarea>
           </div>
         </div>
-        <div style="display: flex; gap:10px;justify-content:center;">
+        <div style="display: flex; gap:10px;justify-content:center;align-items:baseline;">
           <button class="btn btn-primary" onClick={() => window.print()}>Print</button>
           <button class="btn btn-primary" onClick={() => this.setState({ chosenCards: [] })}>Clear</button>
           { this.state.activeTab == 'import' && (<button class="btn btn-primary" onClick={() => this.importFromFabrary(document.querySelector('textarea[name="card-import"]').value)}>import from fabrary</button>) }
+          <div class="form-check" onClick={() => this.setState({ addGapOnPrint: !this.state.addGapOnPrint })}>
+            <input type="checkbox" name="addGapOnPrintCheck" class="form-check-input" checked={this.state.addGapOnPrint} />
+            <label class="form-check-label" for="addGapOnPrintCheck">Add gap on print</label>
+          </div>
         </div>
       </div>
       <AppContainer>
@@ -159,7 +164,7 @@ export default class App extends Component {
           {(this.state.activeTab == 'search' && this.state.searchResultCards.length > 0 && <CardList cards={this.state.searchResultCards} chosenList={false} addCardToChosenCards={this.addCardToChosenCards} />)}
         </div>
         <div style={`${ this.state.chosenCards.length > 0 ? '' : 'display:none;'}`}>
-          <CardList cards={this.state.chosenCards} chosenList={true} changeCardPrintingFromChosenCards={this.changeCardPrintingFromChosenCards} removeCardFromChosenCards={this.removeCardFromChosenCards} />
+          <CardList cards={this.state.chosenCards} chosenList={true} changeCardPrintingFromChosenCards={this.changeCardPrintingFromChosenCards} removeCardFromChosenCards={this.removeCardFromChosenCards} addGapOnPrint={this.state.addGapOnPrint} />
         </div>
       </AppContainer>
     </>);

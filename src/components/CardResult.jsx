@@ -7,37 +7,6 @@ const CardDiv = styled.div`
   display: flex;
   gap: 2px;
   flex-direction: column;
-  img {
-    max-width: 100%;
-    ${props => {
-      if (props.rotateImage) {
-        return `
-          transform: rotate(90deg) scale(1.3968) translate(24%);
-        `;
-      }
-    }}
-
-    @media print {
-      border: dashed 2px black;
-      height: 88mm;
-      width: 63mm;
-      max-width: unset;
-
-      ${props => {
-        if (props.rotateImage) {
-          return `
-            height: 63mm;
-            width: 88mm;
-          `
-        } else {
-          return `
-            height: 88mm;
-            width: 63mm;
-          `
-        }
-      }}
-    }
-  }
 
   @media print {
     gap: 0;
@@ -68,8 +37,59 @@ const ImageWrapper = styled.div`
   height: 100%;
   min-height: 329px;
 
+  img {
+    max-width: 100%;
+    ${props => {
+      if (props.rotateImage) {
+        return `
+          transform: rotate(90deg) scale(1.3968) translate(24%);
+        `;
+      }
+    }}
+
+    @media print {
+      border: dashed 2px black;
+      max-width: unset;
+      height: 88mm;
+      width: 63mm;
+
+      ${props => {
+        if (props.rotateImage) {
+          return `
+            transform: rotate(90deg) scaleX(1.3968) scaleY(0.6979);
+          `
+        } else {
+          return `
+          `
+        }
+      }}
+    }
+  }
+
+  @media print {
+    min-height: unset;
+    height: 88mm;
+    width: 63mm;
+    ${props => {
+      return '';
+      if (props.rotateImage) {
+        return `
+          // height: 63mm;
+          // width: 88mm;
+          height: 88mm;
+          width: 63mm;
+        `
+      } else {
+        return `
+          height: 88mm;
+          width: 63mm;
+        `
+      }
+    }}
+  }
+
   @media only screen and (max-width: 600px) {
-    min-height: 488px !important;
+    min-height: 488px;
   }
 `;
 
@@ -185,9 +205,9 @@ export default class CardResult extends Component {
     const rotateImage = card.played_horizontally && printing.image_rotation_degrees != 270 && printing.image_rotation_degrees != 90
 
     return (
-      <CardDiv rotateImage={rotateImage}>
+      <CardDiv>
         <label class="no-print">{card.name}</label>
-        <ImageWrapper>
+        <ImageWrapper rotateImage={rotateImage}>
           <img src={printing.image_url} alt={card.name} />
         </ImageWrapper>
         <label class="no-print">Printing #{this.state.currentPrintingIdx+1}</label>

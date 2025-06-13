@@ -4,27 +4,6 @@ var Tn=Object.defineProperty;var Dn=(e,t,r)=>t in e?Tn(e,t,{enumerable:!0,config
   display: flex;
   gap: 2px;
   flex-direction: column;
-  img {
-    max-width: 100%;
-    ${e=>{if(e.rotateImage)return`
-          transform: rotate(90deg) scale(1.3968) translate(24%);
-        `}}
-
-    @media print {
-      border: dashed 2px black;
-      height: 88mm;
-      width: 63mm;
-      max-width: unset;
-
-      ${e=>e.rotateImage?`
-            height: 63mm;
-            width: 88mm;
-          `:`
-            height: 88mm;
-            width: 63mm;
-          `}
-    }
-  }
 
   @media print {
     gap: 0;
@@ -45,10 +24,36 @@ var Tn=Object.defineProperty;var Dn=(e,t,r)=>t in e?Tn(e,t,{enumerable:!0,config
   height: 100%;
   min-height: 329px;
 
-  @media only screen and (max-width: 600px) {
-    min-height: 488px !important;
+  img {
+    max-width: 100%;
+    ${e=>{if(e.rotateImage)return`
+          transform: rotate(90deg) scale(1.3968) translate(24%);
+        `}}
+
+    @media print {
+      border: dashed 2px black;
+      max-width: unset;
+      height: 88mm;
+      width: 63mm;
+
+      ${e=>e.rotateImage?`
+            transform: rotate(90deg) scaleX(1.3968) scaleY(0.6979);
+          `:`
+          `}
+    }
   }
-`;class Pr extends D{constructor(){super();q(this,"setDefaultPrinting",()=>{let r=this.props.printing||this.props.card.printings[0];this.setState({printing:r,currentPrintingIdx:this.props.card.printings.findIndex(n=>r.unique_id==n.unique_id)})});q(this,"selectNextPrint",()=>{const{card:r={},chosenList:n=!1,changeCardPrintingFromChosenCards:o=null,entryIndex:i=null}=this.props;this.state.currentPrintingIdx>=r.printings.length-1||(n?i!==null&&o(i,r.printings[this.state.currentPrintingIdx+1]):this.setState({printing:r.printings[this.state.currentPrintingIdx+1],currentPrintingIdx:this.state.currentPrintingIdx+1}))});q(this,"selectPreviousPrint",()=>{const{card:r={},chosenList:n=!1,changeCardPrintingFromChosenCards:o=null,entryIndex:i=null}=this.props;this.state.currentPrintingIdx<=0||(n?i!==null&&o(i,r.printings[this.state.currentPrintingIdx-1]):this.setState({printing:r.printings[this.state.currentPrintingIdx-1],currentPrintingIdx:this.state.currentPrintingIdx-1}))});this.state={printing:null,currentPrintingIdx:0}}componentDidMount(){this.setDefaultPrinting()}componentDidUpdate(r){var n,o;r&&(r.card.unique_id!=this.props.card.unique_id||((n=r.printing)==null?void 0:n.unique_id)!=((o=this.props.printing)==null?void 0:o.unique_id))&&this.setDefaultPrinting()}render(){const{card:r={},chosenList:n=!1}=this.props,{printing:o}=this.state;if(o==null)return y($r,{children:"Loading..."});let i=this.state.currentPrintingIdx<r.printings.length-1,s=this.state.currentPrintingIdx>0,c;n?c=y(Ei,{onClick:()=>this.props.removeCardFromChosenCards(r,o),children:" Remove "}):c=y(Ni,{onClick:()=>this.props.addCardToChosenCards(r,o),children:" Add "});const u=r.played_horizontally&&o.image_rotation_degrees!=270&&o.image_rotation_degrees!=90;return y($r,{rotateImage:u,children:[y("label",{class:"no-print",children:r.name}),y(Ai,{children:y("img",{src:o.image_url,alt:r.name})}),y("label",{class:"no-print",children:["Printing #",this.state.currentPrintingIdx+1]}),y(Ii,{children:[y(kr,{onClick:()=>this.selectPreviousPrint(),disabled:!s,children:"<"}),c,y(kr,{onClick:()=>this.selectNextPrint(),disabled:!i,children:">"})]})]})}}const Ri=K.div`
+
+  @media print {
+    min-height: unset;
+    height: 88mm;
+    width: 63mm;
+    ${e=>""}
+  }
+
+  @media only screen and (max-width: 600px) {
+    min-height: 488px;
+  }
+`;class Pr extends D{constructor(){super();q(this,"setDefaultPrinting",()=>{let r=this.props.printing||this.props.card.printings[0];this.setState({printing:r,currentPrintingIdx:this.props.card.printings.findIndex(n=>r.unique_id==n.unique_id)})});q(this,"selectNextPrint",()=>{const{card:r={},chosenList:n=!1,changeCardPrintingFromChosenCards:o=null,entryIndex:i=null}=this.props;this.state.currentPrintingIdx>=r.printings.length-1||(n?i!==null&&o(i,r.printings[this.state.currentPrintingIdx+1]):this.setState({printing:r.printings[this.state.currentPrintingIdx+1],currentPrintingIdx:this.state.currentPrintingIdx+1}))});q(this,"selectPreviousPrint",()=>{const{card:r={},chosenList:n=!1,changeCardPrintingFromChosenCards:o=null,entryIndex:i=null}=this.props;this.state.currentPrintingIdx<=0||(n?i!==null&&o(i,r.printings[this.state.currentPrintingIdx-1]):this.setState({printing:r.printings[this.state.currentPrintingIdx-1],currentPrintingIdx:this.state.currentPrintingIdx-1}))});this.state={printing:null,currentPrintingIdx:0}}componentDidMount(){this.setDefaultPrinting()}componentDidUpdate(r){var n,o;r&&(r.card.unique_id!=this.props.card.unique_id||((n=r.printing)==null?void 0:n.unique_id)!=((o=this.props.printing)==null?void 0:o.unique_id))&&this.setDefaultPrinting()}render(){const{card:r={},chosenList:n=!1}=this.props,{printing:o}=this.state;if(o==null)return y($r,{children:"Loading..."});let i=this.state.currentPrintingIdx<r.printings.length-1,s=this.state.currentPrintingIdx>0,c;n?c=y(Ei,{onClick:()=>this.props.removeCardFromChosenCards(r,o),children:" Remove "}):c=y(Ni,{onClick:()=>this.props.addCardToChosenCards(r,o),children:" Add "});const u=r.played_horizontally&&o.image_rotation_degrees!=270&&o.image_rotation_degrees!=90;return y($r,{children:[y("label",{class:"no-print",children:r.name}),y(Ai,{rotateImage:u,children:y("img",{src:o.image_url,alt:r.name})}),y("label",{class:"no-print",children:["Printing #",this.state.currentPrintingIdx+1]}),y(Ii,{children:[y(kr,{onClick:()=>this.selectPreviousPrint(),disabled:!s,children:"<"}),c,y(kr,{onClick:()=>this.selectNextPrint(),disabled:!i,children:">"})]})]})}}const Ri=K.div`
   margin: 5px 0;
   padding: 10px;
   display: grid;

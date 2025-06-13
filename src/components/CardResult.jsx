@@ -1,6 +1,7 @@
 import { Component } from "preact";
 import styled from "styled-components";
 
+
 const CardDiv = styled.div`
   padding: 10px;
   display: flex;
@@ -8,12 +9,33 @@ const CardDiv = styled.div`
   flex-direction: column;
   img {
     max-width: 100%;
+    ${props => {
+      if (props.rotateImage) {
+        return `
+          transform: rotate(90deg) scale(1.3968) translate(24%);
+        `;
+      }
+    }}
 
     @media print {
       border: dashed 2px black;
       height: 88mm;
       width: 63mm;
       max-width: unset;
+
+      ${props => {
+        if (props.rotateImage) {
+          return `
+            height: 63mm;
+            width: 88mm;
+          `
+        } else {
+          return `
+            height: 88mm;
+            width: 63mm;
+          `
+        }
+      }}
     }
   }
 
@@ -40,6 +62,16 @@ const ActionContainer = styled.div.attrs({ className: 'no-print' })`
 const MoveButton = styled.button.attrs({ className: 'no-print btn btn-primary' })`
   padding: 10px;
 `
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 329px;
+
+  @media only screen and (max-width: 600px) {
+    min-height: 488px !important;
+  }
+`;
 
 
 export default class CardResult extends Component {
@@ -150,10 +182,14 @@ export default class CardResult extends Component {
       actionButton = (<AddButton onClick={() => this.props.addCardToChosenCards(card, printing)}> Add </AddButton>)
     }
 
+    const rotateImage = card.played_horizontally && printing.image_rotation_degrees != 270 && printing.image_rotation_degrees != 90
+
     return (
-      <CardDiv>
+      <CardDiv rotateImage={rotateImage}>
         <label class="no-print">{card.name}</label>
-        <img src={printing.image_url} alt={card.name} />
+        <ImageWrapper>
+          <img src={printing.image_url} alt={card.name} />
+        </ImageWrapper>
         <label class="no-print">Printing #{this.state.currentPrintingIdx+1}</label>
         <ActionContainer>
           <MoveButton onClick={() => this.selectPreviousPrint()} disabled={!canGoToPreviousPrint}>

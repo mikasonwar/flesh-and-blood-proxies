@@ -11,7 +11,7 @@ const CardListDiv = styled.div`
   background-color: #ffffffdd;
 
   @media print {
-    gap: ${props => props.addGapOnPrint ? '5px' : '0' };
+    gap: ${props => props.addGapOnPrint ? '5mm' : '0' };
   }
 
   @media only screen and (max-width: 600px) {
@@ -21,7 +21,7 @@ const CardListDiv = styled.div`
 
 export default class CardList extends Component {
   render() {
-    const { 
+    const {
       cards = [],
       addCardToChosenCards = null,
       removeCardFromChosenCards = null,

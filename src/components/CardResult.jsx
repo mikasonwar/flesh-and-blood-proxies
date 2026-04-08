@@ -3,41 +3,48 @@ import styled from "styled-components";
 
 
 const CardDiv = styled.div`
-  padding: 10px;
+  padding: 6px;
   display: flex;
-  gap: 2px;
+  gap: 5px;
   flex-direction: column;
-
-  @media print {
-    gap: 0;
-    padding: 0;
-  }
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffdf7 0%, #fff7e3 100%);
+  border: 1px solid rgba(173, 139, 58, 0.18);
 `
 
-const AddButton = styled.button.attrs({ className: 'no-print btn btn-success'})`
-  font-size: 18px;
+const AddButton = styled.button.attrs({ className: 'btn btn-success'})`
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
 `;
 
-const RemoveButton = styled.button.attrs({ className: 'no-print btn btn-danger'})`
-  font-size: 18px;
+const RemoveButton = styled.button.attrs({ className: 'btn btn-danger'})`
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
 `
 
-const ActionContainer = styled.div.attrs({ className: 'no-print' })`
+const ActionContainer = styled.div`
   display: grid;
-  grid-template-columns: 30px 1fr 30px;
+  grid-template-columns: 34px 1fr 34px;
   gap: 5px;
 `
 
-const MoveButton = styled.button.attrs({ className: 'no-print btn btn-primary' })`
-  padding: 10px;
+const MoveButton = styled.button.attrs({ className: 'btn btn-primary' })`
+  padding: 0.35rem 0.2rem;
 `
 
 const ImageWrapper = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 329px;
+  min-height: 188px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #f7f1dd;
 
   img {
+    display: block;
+    width: 100%;
     max-width: 100%;
     ${props => {
       if (props.rotateImage) {
@@ -46,51 +53,49 @@ const ImageWrapper = styled.div`
         `;
       }
     }}
-
-    @media print {
-      border: dashed 2px black;
-      max-width: unset;
-      height: 88mm;
-      width: 63mm;
-
-      ${props => {
-        if (props.rotateImage) {
-          return `
-            transform: rotate(90deg) scaleX(1.3968) scaleY(0.6979);
-          `
-        } else {
-          return `
-          `
-        }
-      }}
-    }
-  }
-
-  @media print {
-    min-height: unset;
-    height: 88mm;
-    width: 63mm;
-    ${props => {
-      return '';
-      if (props.rotateImage) {
-        return `
-          // height: 63mm;
-          // width: 88mm;
-          height: 88mm;
-          width: 63mm;
-        `
-      } else {
-        return `
-          height: 88mm;
-          width: 63mm;
-        `
-      }
-    }}
   }
 
   @media only screen and (max-width: 600px) {
-    min-height: 488px;
+    min-height: 250px;
   }
+`;
+
+const CardTitle = styled.label`
+  color: #3d2f14;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+`;
+
+const PrintingMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  align-items: center;
+  color: #6d624a;
+  font-size: 0.7rem;
+`;
+
+const PrintingBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.4rem;
+  border-radius: 999px;
+  background: #f4e1ac;
+  color: #5b4516;
+  font-weight: 600;
+`;
+
+const QuantityBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: #4b3511;
+  color: #fff7df;
+  font-weight: 700;
 `;
 
 
@@ -131,7 +136,6 @@ export default class CardResult extends Component {
       card = {}, 
       chosenList = false,
       changeCardPrintingFromChosenCards = null,
-      entryIndex = null,
     } = this.props;
 
     if (this.state.currentPrintingIdx >= card.printings.length - 1) {
@@ -139,9 +143,7 @@ export default class CardResult extends Component {
     }
 
     if(chosenList) {
-      if(entryIndex !== null) {
-        changeCardPrintingFromChosenCards(entryIndex, card.printings[this.state.currentPrintingIdx + 1]);
-      }
+      changeCardPrintingFromChosenCards(card.unique_id, card.printings[this.state.currentPrintingIdx + 1]);
     } else {
       this.setState({
         printing: card.printings[this.state.currentPrintingIdx + 1],
@@ -155,7 +157,6 @@ export default class CardResult extends Component {
       card = {}, 
       chosenList = false,
       changeCardPrintingFromChosenCards = null,
-      entryIndex = null,
     } = this.props;
 
     if (this.state.currentPrintingIdx <= 0) {
@@ -163,9 +164,7 @@ export default class CardResult extends Component {
     }
 
     if(chosenList) {
-      if(entryIndex !== null) {
-        changeCardPrintingFromChosenCards(entryIndex, card.printings[this.state.currentPrintingIdx - 1]);
-      }
+      changeCardPrintingFromChosenCards(card.unique_id, card.printings[this.state.currentPrintingIdx - 1]);
     } else {
       this.setState({
         printing: card.printings[this.state.currentPrintingIdx - 1],
@@ -177,7 +176,9 @@ export default class CardResult extends Component {
   render() {
     const { 
       card = {}, 
-      chosenList = false
+      chosenList = false,
+      quantity = 1,
+      hasMixedPrintings = false,
     } = this.props;
 
     const {
@@ -197,7 +198,7 @@ export default class CardResult extends Component {
 
     let actionButton;
     if(chosenList) {
-      actionButton = (<RemoveButton onClick={() => this.props.removeCardFromChosenCards(card, printing)}> Remove </RemoveButton>)
+      actionButton = (<RemoveButton onClick={() => this.props.removeCardFromChosenCards(card)}> Remove </RemoveButton>)
     } else {
       actionButton = (<AddButton onClick={() => this.props.addCardToChosenCards(card, printing)}> Add </AddButton>)
     }
@@ -206,11 +207,17 @@ export default class CardResult extends Component {
 
     return (
       <CardDiv>
-        <label class="no-print">{card.name}</label>
+        <CardTitle>{card.name}</CardTitle>
         <ImageWrapper rotateImage={rotateImage}>
           <img src={printing.image_url} alt={card.name} />
         </ImageWrapper>
-        <label class="no-print">Printing #{this.state.currentPrintingIdx+1}</label>
+        <PrintingMeta>
+          <span>{hasMixedPrintings ? 'Mixed printings' : `Printing #${this.state.currentPrintingIdx+1}`}</span>
+          <div style="display:flex;gap:6px;align-items:center;">
+            {chosenList && <QuantityBadge>x{quantity}</QuantityBadge>}
+            <PrintingBadge>{card.printings.length} variants</PrintingBadge>
+          </div>
+        </PrintingMeta>
         <ActionContainer>
           <MoveButton onClick={() => this.selectPreviousPrint()} disabled={!canGoToPreviousPrint}>
             {"<"}

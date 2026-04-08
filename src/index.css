@@ -1,11 +1,8 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #27180d;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,21 +15,51 @@ html {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  height: 100%;
+  height: auto;
+  background: transparent;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at top, rgba(232, 192, 120, 0.14), transparent 32%),
+    linear-gradient(180deg, rgba(247, 239, 224, 0.22) 0%, rgba(234, 214, 177, 0.14) 52%, rgba(212, 176, 127, 0.1) 100%),
+    linear-gradient(rgba(39, 23, 8, 0.28), rgba(39, 23, 8, 0.08)),
+    url('/monarch.jpg') center/cover no-repeat;
+  pointer-events: none;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-footer {
+  margin-top: auto;
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  background: #24190f;
+  color: #f3e7cc;
+}
+
+.my-footer .text-body-secondary {
+  color: #f3e7cc !important;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-.page-wrapper {
-  background-image: url('/monarch.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
 }
